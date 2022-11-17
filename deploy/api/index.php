@@ -10,11 +10,50 @@ const JWT_SECRET = "makey1234567";
 
 $app = AppFactory::create();
 
+function createJwT (Response $response) : Response {
+
+    $issuedAt = time();
+    $expirationTime = $issuedAt + 60;
+    $payload = array(
+        'userid' => 'toto',
+        'email' => 'titi@gmail.com',
+        'pseudo' => 'titiPseudo',
+        'iat' => $issuedAt,
+        'exp' => $expirationTime
+    );
+
+    $token_jwt = JWT::encode($payload,JWT_SECRET, "HS256");
+    $response = $response->withHeader("Authorization", "Bearer {$token_jwt}");
+    return $response;
+}
 
 $app->get('/api/hello/{name}', function (Request $request, Response $response, $args) {
     $array = [];
     $array ["nom"] = $args ['name'];
     $response->getBody()->write(json_encode ($array));
+    return $response;
+});
+
+$app->post('/api/login', function (Request $request, Response $response, $args) {
+    $err=false;
+    $body = $request->getParsedBody();
+    $login = $body ['login'] ?? "";
+    $pass = $body ['pass'] ?? "";
+
+    if (!preg_match("/[a-zA-Z0-9]{1,20}/",$login))   {
+        $err = true;
+    }
+    if (!preg_match("/[a-zA-Z0-9]{1,20}/",$pass))  {
+        $err=true;
+    }
+
+    if (!$err) {
+        $response = createJwT ($response);
+        $data = array('nom' => 'toto', 'prenom' => 'titi');
+        $response->getBody()->write(json_encode($data));
+    } else {
+        $response = $response->withStatus(401);
+    }
     return $response;
 });
 
@@ -36,3 +75,7 @@ $options = [
 
 $app->add(new Tuupola\Middleware\JwtAuthentication($options));
 $app->run ();
+
+function createJwT (Response $response) : Response {
+    
+}
