@@ -48,7 +48,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     }
 
     if (!$err) {
-        $response = createJwT ($response);
+        $response = createJwT($response);
         $data = array('nom' => 'toto', 'prenom' => 'titi');
         $response->getBody()->write(json_encode($data));
     } else {
@@ -65,7 +65,7 @@ $options = [
     "algorithm" => ["HS256"],
     "secret" => JWT_SECRET,
     "path" => ["/api"],
-    "ignore" => ["/api/hello"],
+    "ignore" => ["/api/hello", "/api/login"],
     "error" => function ($response, $arguments) {
         $data = array('ERREUR' => 'Connexion', 'ERREUR' => 'JWT Non valide');
         $response = $response->withStatus(401);
