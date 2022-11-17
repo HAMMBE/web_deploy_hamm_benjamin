@@ -75,7 +75,3 @@ $options = [
 
 $app->add(new Tuupola\Middleware\JwtAuthentication($options));
 $app->run ();
-
-function createJwT (Response $response) : Response {
-    
-}
