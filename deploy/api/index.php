@@ -62,7 +62,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 
     if (!$err) {
         $response = createJwT($response);
-        $data = array('nom' => 'toto', 'prenom' => 'titi');
+        $data = array('nom' => $login, 'prenom' => 'titi');
         $response->getBody()->write(json_encode($data));
     } else {
         $response = $response->withStatus(401);
