@@ -16,6 +16,7 @@ use Slim\Factory\AppFactory;
 use Tuupola\Middleware\HttpBasicAuthentication;
 use \Firebase\JWT\JWT;
 require __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../bootstrap.php';
  
 const JWT_SECRET = "makey1234567";
 
@@ -61,9 +62,16 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     }
 
     if (!$err) {
-        $response = createJwT($response);
-        $data = array('nom' => $login, 'prenom' => 'titi');
-        $response->getBody()->write(json_encode($data));
+        $utilisateurRepository = $entityManager->getRepository('client');
+        $utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
+        if ($utilisateur and $login == $utilisateur->getLogin() and $pass == $utilisateur->getPassword()) {
+            $response = createJwT($response);
+            $data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
+            $response->getBody()->write(json_encode($data));
+        } else {          
+            $response = $response->withStatus(401);
+        }
+
     } else {
         $response = $response->withStatus(401);
     }
