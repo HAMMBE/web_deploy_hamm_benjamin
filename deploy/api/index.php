@@ -67,7 +67,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
         $utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
         if ($utilisateur and $login == $utilisateur->getLogin() and $pass == $utilisateur->getPassword()) {
             $response = createJwT($response);
-            $data = array('nom' => $utilisateur->getNom(), 'prenom' => $utilisateur->getPrenom());
+            $data = array('nom' => $utilisateur->getFirstname(), 'prenom' => $utilisateur->getLastname());
             $response->getBody()->write(json_encode($data));
         } else {          
             $response = $response->withStatus(401);
