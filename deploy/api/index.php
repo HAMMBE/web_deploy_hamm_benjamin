@@ -48,7 +48,8 @@ $app->get('/api/hello/{name}', function (Request $request, Response $response, $
 });
 
 $app->post('/api/login', function (Request $request, Response $response, $args) {
-    $err=false;
+	global $entityManager;    
+	$err=false;
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $login = $body['login'] ?? ""; 
