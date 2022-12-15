@@ -70,7 +70,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
             $data = array('nom' => $utilisateur->getFirstname(), 'prenom' => $utilisateur->getLastname());
             $response->getBody()->write(json_encode($data));
         } else {          
-            $response = $response->withStatus(401);
+            $response = $response->withStatus(404);
         }
 
     } else {
