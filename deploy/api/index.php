@@ -87,7 +87,7 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $body = $body['client'];
-    $login = $body['firstname'] ?? ""; 
+    $firstname = $body['firstname'] ?? ""; 
     $lastname = $body['lastname'] ?? "";
     $email = $body['email'] ?? "";
     $password = $body['password'] ?? "";
