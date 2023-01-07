@@ -86,6 +86,7 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     $err=false;
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
+    $body = $body['client'];
     $login = $body['firstname'] ?? ""; 
     $lastname = $body['lastname'] ?? "";
     $email = $body['email'] ?? "";
@@ -104,8 +105,7 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     $entityManager->persist($client);
     $entityManager->flush();
     
-    $response->getBody()->write($inputJSON);
-    return $response;
+    return $response->withStatus(201);
 });
 
 $app->get('/api/catalogue', function (Request $request, Response $response, $args) {
