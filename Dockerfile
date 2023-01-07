@@ -46,6 +46,8 @@ RUN php vendor/bin/doctrine orm:generate-entities --regenerate-entities=true --g
 
 RUN composer update
 
+RUN cat ./api/models/Client.php
+
 
 
 
