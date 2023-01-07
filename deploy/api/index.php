@@ -86,25 +86,25 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     return $response;
 });
 
-$array = [
-    [
-        "id" => 1,
-        "name" => "Product 1",
-        "price" => "100"
-    ],
-    [
-        "id" => 2,
-        "name" => "Product 2",
-        "price" => "200"
-    ]
-];
+// $array = [
+//     [
+//         "id" => 1,
+//         "name" => "Product 1",
+//         "price" => "100"
+//     ],
+//     [
+//         "id" => 2,
+//         "name" => "Product 2",
+//         "price" => "200"
+//     ]
+// ];
 
 $app->get('/api/catalogue', function (Request $request, Response $response, $args) {
     // global $array;
     // $response->getBody()->write(json_encode ($array));
     // return $response;
     global $entityManager;
-    $produitRepository = $entityManager->getRepository('Produit');
+    $produitRepository = $entityManager->getRepository('Product');
     $produits = $produitRepository->findAll();
     $data = array();
     foreach ($produits as $produit) {
@@ -125,7 +125,7 @@ $app->get('/api/catalogue/{id}', function (Request $request, Response $response,
     // return $response;
     global $entityManager;
     $id = $args['id'];
-    $produitRepository = $entityManager->getRepository('Produit');
+    $produitRepository = $entityManager->getRepository('Product');
     $produit = $produitRepository->findOneBy(array('id' => $id));
     if ($produit) {
         $data = array('id' => trim($produit->getId()), 'name' => trim($produit->getName()), 'price' => trim($produit->getPrice()));
