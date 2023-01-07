@@ -54,7 +54,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
     $inputJSON = file_get_contents('php://input');
     $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
     $login = $body['login'] ?? ""; 
-    $pass = $body['pass'] ?? "";
+    $pass = $body['password'] ?? "";
 
     if (!preg_match("/[a-zA-Z0-9]{1,20}/",$login))   {
         $err = true;
