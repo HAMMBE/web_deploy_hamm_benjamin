@@ -67,7 +67,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
         $utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
         if ($utilisateur) {
             $response = createJwT($response);
-            $data = array('firstname' => trim($utilisateur->getFirstname()), 'lastname' => trim($utilisateur->getLastname()), 'email' => trim($utilisateur->getEmail()), 'login' => trim($utilisateur->getLogin()));
+            $data = array('firstname' => trim($utilisateur->getFirstname()), 'lastname' => trim($utilisateur->getLastname()), 'email' => trim($utilisateur->getEmail()), 'login' => trim($utilisateur->getLogin()),'phone' => trim($utilisateur->getPhone()));
             $response->getBody()->write(json_encode($data));
         } else {          
             $response = $response->withStatus(404);
@@ -100,20 +100,39 @@ $array = [
 ];
 
 $app->get('/api/catalogue', function (Request $request, Response $response, $args) {
-    global $array;
-    $response->getBody()->write(json_encode ($array));
+    // global $array;
+    // $response->getBody()->write(json_encode ($array));
+    // return $response;
+    global $entityManager;
+    $produitRepository = $entityManager->getRepository('Produit');
+    $produits = $produitRepository->findAll();
+    $data = array();
+    foreach ($produits as $produit) {
+        $data[] = array('id' => trim($produit->getId()), 'name' => trim($produit->getName()), 'price' => trim($produit->getPrice()));
+    }
+    $response->getBody()->write(json_encode($data));
     return $response;
 });
 
 $app->get('/api/catalogue/{id}', function (Request $request, Response $response, $args) {
-    global $array;
+    // global $array;
+    // $id = $args['id'];
+    // if($id > 0 && $id <= count($array)) {
+    //     $response->getBody()->write(json_encode ($array[$id-1]));
+    // } else {
+    //     $response = $response->withStatus(404);
+    // }
+    // return $response;
+    global $entityManager;
     $id = $args['id'];
-    if($id > 0 && $id <= count($array)) {
-        $response->getBody()->write(json_encode ($array[$id-1]));
-    } else {
+    $produitRepository = $entityManager->getRepository('Produit');
+    $produit = $produitRepository->findOneBy(array('id' => $id));
+    if ($produit) {
+        $data = array('id' => trim($produit->getId()), 'name' => trim($produit->getName()), 'price' => trim($produit->getPrice()));
+        $response->getBody()->write(json_encode($data));
+    } else {          
         $response = $response->withStatus(404);
     }
-    return $response;
 });
 
 $options = [
