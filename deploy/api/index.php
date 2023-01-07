@@ -15,6 +15,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 use Tuupola\Middleware\HttpBasicAuthentication;
 use \Firebase\JWT\JWT;
+include_once './models/Client.php';
 require __DIR__ . '/../vendor/autoload.php';
 require_once __DIR__ . '/../bootstrap.php';
  
@@ -80,8 +81,29 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
 });
 
 $app->post('/api/register', function (Request $request, Response $response, $args) {
+    global $entityManager;
+    
     $err=false;
     $inputJSON = file_get_contents('php://input');
+    $body = json_decode( $inputJSON, TRUE ); //convert JSON into array 
+    $login = $body['firstname'] ?? ""; 
+    $lastname = $body['lastname'] ?? "";
+    $email = $body['email'] ?? "";
+    $password = $body['password'] ?? "";
+    $login = $body['login'] ?? "";
+    $phone = $body['phone'] ?? "";
+
+    $client = new Client();
+    $client->setFirstname($firstname);
+    $client->setLastname($lastname);
+    $client->setEmail($email);
+    $client->setPassword($password);
+    $client->setLogin($login);
+    $client->setPhone($phone);
+
+    $entityManager->persist($client);
+    $entityManager->flush();
+    
     $response->getBody()->write($inputJSON);
     return $response;
 });
