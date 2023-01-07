@@ -86,23 +86,7 @@ $app->post('/api/register', function (Request $request, Response $response, $arg
     return $response;
 });
 
-// $array = [
-//     [
-//         "id" => 1,
-//         "name" => "Product 1",
-//         "price" => "100"
-//     ],
-//     [
-//         "id" => 2,
-//         "name" => "Product 2",
-//         "price" => "200"
-//     ]
-// ];
-
 $app->get('/api/catalogue', function (Request $request, Response $response, $args) {
-    // global $array;
-    // $response->getBody()->write(json_encode ($array));
-    // return $response;
     global $entityManager;
     $produitRepository = $entityManager->getRepository('Product');
     $produits = $produitRepository->findAll();
@@ -115,14 +99,6 @@ $app->get('/api/catalogue', function (Request $request, Response $response, $arg
 });
 
 $app->get('/api/catalogue/{id}', function (Request $request, Response $response, $args) {
-    // global $array;
-    // $id = $args['id'];
-    // if($id > 0 && $id <= count($array)) {
-    //     $response->getBody()->write(json_encode ($array[$id-1]));
-    // } else {
-    //     $response = $response->withStatus(404);
-    // }
-    // return $response;
     global $entityManager;
     $id = $args['id'];
     $produitRepository = $entityManager->getRepository('Product');
@@ -133,6 +109,7 @@ $app->get('/api/catalogue/{id}', function (Request $request, Response $response,
     } else {          
         $response = $response->withStatus(404);
     }
+    return $response;
 });
 
 $options = [
