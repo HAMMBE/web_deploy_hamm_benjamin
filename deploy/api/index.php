@@ -24,14 +24,14 @@ const JWT_SECRET = "makey1234567";
 
 $app = AppFactory::create();
 
-function createJwT (Response $response) : Response {
+function createJwT (Response $response, string $userid, string $email, string $login) : Response {
 
     $issuedAt = time();
     $expirationTime = $issuedAt + 60000;
     $payload = array(
-        'userid' => '999',
-        'email' => 'ESAqua@gmail.com',
-        'pseudo' => 'ESAqua',
+        'userid' => $userid,
+        'email' => $email,
+        'login' => $pseudo,
         'iat' => $issuedAt,
         'exp' => $expirationTime
     );
@@ -68,7 +68,7 @@ $app->post('/api/login', function (Request $request, Response $response, $args) 
         $utilisateurRepository = $entityManager->getRepository('Client');
         $utilisateur = $utilisateurRepository->findOneBy(array('login' => $login, 'password' => $pass));
         if ($utilisateur) {
-            $response = createJwT($response);
+            $response = createJwT($response, $utilisateur->getId(), $utilisateur->getEmail(), $utilisateur->getLogin());
             $data = array('firstname' => trim($utilisateur->getFirstname()), 'lastname' => trim($utilisateur->getLastname()), 'email' => trim($utilisateur->getEmail()), 'login' => trim($utilisateur->getLogin()),'phone' => trim($utilisateur->getPhone()));
             $response->getBody()->write(json_encode($data));
         } else {          
