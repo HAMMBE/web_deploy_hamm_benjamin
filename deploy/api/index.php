@@ -31,7 +31,7 @@ function createJwT (Response $response, string $userid, string $email, string $l
     $payload = array(
         'userid' => $userid,
         'email' => $email,
-        'login' => $pseudo,
+        'login' => $login,
         'iat' => $issuedAt,
         'exp' => $expirationTime
     );
